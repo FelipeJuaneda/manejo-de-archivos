@@ -17,7 +17,7 @@ class Contenedor {
   async save(obj) {
     try {
       let inventary = await fs.promises.readFile(`${this.fileName}`, "utf-8");
-      console.log(inventary);
+      // console.log(inventary);
       if (!inventary) {
         obj.id = 1;
         const arrObjs = [obj];
@@ -113,3 +113,32 @@ async function uploadProducts() {
 }
 
 uploadProducts();
+
+/* express */
+const express = require("express");
+const app = express();
+const port = 8080;
+
+//home
+app.get("/", (req, res) => {
+  res.send("casita");
+});
+
+// ruta productos
+app.get("/products", (req, res) => {
+  newFile.getAll().then((i) => res.json(i));
+});
+
+// ruta productoRandom
+app.get("/productsRandom", (req, res) => {
+  const min = Math.ceil(1);
+  const max = Math.floor(3);
+  const numAleatorio = Math.floor(Math.random() * (max - min + 1) + min);
+  console.log(numAleatorio)
+  newFile.getbyId(numAleatorio).then((i) => res.json(i));
+});
+
+//listen
+app.listen(port, () => {
+  console.log(`Servidor escuchando en el puerto: ${port}`);
+});
